@@ -1,11 +1,19 @@
 package klotski.solve;
 
-public class Node {
+import java.io.Serializable;
+
+public class Node implements Serializable{
 	private Shape shape;
 	private int left;
 	private int right;
 	private int top;
 	private int bottom;
+	
+	public Node(){
+		shape = Shape.invalid;
+		left = -1;
+		top = -1;
+	}
 	
 	public Node(Shape shape, int left, int top){
 		this.shape = shape;
@@ -34,5 +42,4 @@ public class Node {
 		left++;
 		right++;
 	}
-	
 }

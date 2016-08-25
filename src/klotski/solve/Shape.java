@@ -1,6 +1,8 @@
 package klotski.solve;
 
-public enum Shape {
+import java.io.Serializable;
+
+public enum Shape implements Serializable{
 	invalid(0, 0), single(1, 1), horizon(2, 1), vertical(1, 2), square(2, 2);
 	
 	private int length;
