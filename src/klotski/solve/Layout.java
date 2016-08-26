@@ -31,7 +31,7 @@ public class Layout implements Serializable, Comparable<Layout>{
 		for(int i = 0; i < nodes.length; i++){
 			if(nodes[i].getTop() > 0 && mask[nodes[i].getTop() - 1][nodes[i].getLeft()] == 0
 					&& mask[nodes[i].getTop() - 1][nodes[i].getRight()] == 0){
-				Layout next = deepClone();
+				Layout next = this.deepClone();
 				next.nodes[i].moveUp();
 				next.step++;
 				next.toMask();
@@ -44,7 +44,7 @@ public class Layout implements Serializable, Comparable<Layout>{
 			
 			if(nodes[i].getBottom() < ConstValue.rowNum - 1 && mask[nodes[i].getBottom() + 1][nodes[i].getLeft()] == 0
 					&& mask[nodes[i].getBottom() + 1][nodes[i].getRight()] == 0){
-				Layout next = deepClone();
+				Layout next = this.deepClone();
 				next.nodes[i].moveDown();
 				next.step++;
 				next.toMask();
@@ -57,7 +57,7 @@ public class Layout implements Serializable, Comparable<Layout>{
 			
 			if(nodes[i].getLeft() > 0 && mask[nodes[i].getTop()][nodes[i].getLeft() - 1] == 0
 					&& mask[nodes[i].getBottom()][nodes[i].getLeft() - 1] == 0){
-				Layout next = deepClone();
+				Layout next = this.deepClone();
 				next.nodes[i].moveLeft();
 				next.step++;
 				next.toMask();
@@ -68,9 +68,9 @@ public class Layout implements Serializable, Comparable<Layout>{
 				}
 			}
 			
-			if(nodes[i].getLeft() > 0 && mask[nodes[i].getTop()][nodes[i].getRight() + 1] == 0
+			if(nodes[i].getRight() < ConstValue.colNum - 1 && mask[nodes[i].getTop()][nodes[i].getRight() + 1] == 0
 					&& mask[nodes[i].getBottom()][nodes[i].getRight() + 1] == 0){
-				Layout next = deepClone();
+				Layout next = this.deepClone();
 				next.nodes[i].moveRight();
 				next.step++;
 				next.toMask();
@@ -118,7 +118,42 @@ public class Layout implements Serializable, Comparable<Layout>{
 	
 	
 	public void calHeuristicScore(){
-		heuristicScore = 1;
+		if(nodes[0].getTop() == 0){
+			if(nodes[1].getTop() == 2){
+				heuristicScore = step + 80;
+				return;
+			}
+			else if(nodes[1].getTop() == 3){
+				heuristicScore = step + 70;
+				return;
+			}
+			else if(nodes[1].getTop() == 5){
+				heuristicScore = step + 40;
+				return;
+			}
+		}
+		else if(nodes[0].getTop() == 1){
+			heuristicScore = step + 30;
+			return;
+		}
+		else if(nodes[0].getTop() == 2){
+			int sum = 0;
+			for(int i = 2; i <= 5; i++){
+				sum += nodes[i].getTop() * ConstValue.colNum + nodes[i].getLeft();
+			}
+			if(sum <= 37){
+				heuristicScore = step + 20;
+				return;
+			}
+			else{
+				heuristicScore = step;
+				return;
+			}
+		}
+		else if(nodes[0].getTop() == 3){
+			heuristicScore = step;
+			return;
+		}
 	}
 	
 	public boolean isSolved()
@@ -139,8 +174,7 @@ public class Layout implements Serializable, Comparable<Layout>{
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + Arrays.deepHashCode(mask);
-		result = prime * result + Arrays.deepHashCode(maskReverse);
+		result = prime * result + Arrays.deepHashCode(mask) + Arrays.deepHashCode(maskReverse);
 		return result;
 	}
 
@@ -153,19 +187,17 @@ public class Layout implements Serializable, Comparable<Layout>{
 		if (getClass() != obj.getClass())
 			return false;
 		Layout other = (Layout) obj;
-		if (!Arrays.deepEquals(mask, other.mask))
-			return false;
-		if (!Arrays.deepEquals(mask, other.maskReverse))
+		if (!Arrays.deepEquals(mask, other.mask) && !Arrays.deepEquals(mask, other.maskReverse))
 			return false;
 		return true;
 	}
 
 	@Override
 	public int compareTo(Layout o) {
-		if (heuristicScore > o.heuristicScore){
+		if (heuristicScore < o.heuristicScore){
 			return -1;
 		}
-		else if(heuristicScore < o.heuristicScore){
+		else if(heuristicScore > o.heuristicScore){
 			return 1;
 		}
 		return 0;

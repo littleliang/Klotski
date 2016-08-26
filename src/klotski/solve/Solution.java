@@ -8,6 +8,7 @@ import java.util.PriorityQueue;
 public class Solution {
 
 	public static void main(String[] args) throws OptionalDataException, ClassNotFoundException, IOException {
+		long start =System.currentTimeMillis();
 		PriorityQueue<Layout> layoutQueue = new PriorityQueue<>();
 		HashSet<Layout> layoutVisitedSet = new HashSet<>();
 		Layout layout = new Layout(0);
@@ -25,7 +26,7 @@ public class Solution {
 		layout.toMask();
 		layout.calHeuristicScore();
 		layoutQueue.add(layout);
-		
+		layoutVisitedSet.add(layout);
 		Layout curLayout;
 		
 		while (!layoutQueue.isEmpty()) {
@@ -34,13 +35,9 @@ public class Solution {
 				System.out.println("found solution with " + curLayout.step  +" steps");
 				break;
 			}
-			
-			if(!layoutVisitedSet.contains(curLayout)){
-				layoutVisitedSet.add(curLayout);
-				continue;
-			}
 			curLayout.move(layoutQueue, layoutVisitedSet);
-			
 		}
+		long end =System.currentTimeMillis();
+		System.out.println(end - start);
 	}
 }
