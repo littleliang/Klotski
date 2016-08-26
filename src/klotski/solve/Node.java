@@ -3,6 +3,8 @@ package klotski.solve;
 import java.io.Serializable;
 
 public class Node implements Serializable{
+	private static final long serialVersionUID = 7499024249724519228L;
+	
 	private Shape shape;
 	private int left;
 	private int right;
@@ -21,6 +23,26 @@ public class Node implements Serializable{
 		this.top = top;
 		this.right = left + shape.getWidth() - 1;
 		this.bottom = top + shape.getLength() - 1;
+	}
+	
+	public Shape getShape(){
+		return shape;
+	}
+	
+	public int getLeft() {
+		return left;
+	}
+
+	public int getRight() {
+		return right;
+	}
+
+	public int getTop() {
+		return top;
+	}
+
+	public int getBottom() {
+		return bottom;
 	}
 	
 	public void moveDown(){
