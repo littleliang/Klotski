@@ -221,6 +221,14 @@ public class Layout implements Serializable, Comparable<Layout>{
 		else if(heuristicScore > o.heuristicScore){
 			return 1;
 		}
+		else{
+			if (step > o.step){
+				return -1;
+			}
+			else if (step < o.step){
+				return 1;
+			}
+		}
 		return 0;
 	}
 
