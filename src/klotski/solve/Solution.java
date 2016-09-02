@@ -43,14 +43,14 @@ public class Solution {
 			curLayout.move(layoutQueue, layoutVisitedSet);
 		}
 		
-		while(curLayout.getBeforeLayout() != null){
-			printList.addFirst(curLayout);
-			curLayout = curLayout.getBeforeLayout();
-		}
-		
-		for(Layout printLayout : printList){
-			printLayout.printMask();
-		}
+//		while(curLayout.getBeforeLayout() != null){
+//			printList.addFirst(curLayout);
+//			curLayout = curLayout.getBeforeLayout();
+//		}
+//		
+//		for(Layout printLayout : printList){
+//			printLayout.printMask();
+//		}
 		
 		
 		long end =System.currentTimeMillis();
