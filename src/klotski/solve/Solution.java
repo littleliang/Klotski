@@ -3,7 +3,7 @@ package klotski.solve;
 import java.io.IOException;
 import java.io.OptionalDataException;
 import java.util.ArrayDeque;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.PriorityQueue;
 
 public class Solution {
@@ -11,7 +11,7 @@ public class Solution {
 	public static void main(String[] args) throws OptionalDataException, ClassNotFoundException, IOException {
 		long start =System.currentTimeMillis();
 		PriorityQueue<Layout> layoutQueue = new PriorityQueue<>();
-		HashSet<Layout> layoutVisitedSet = new HashSet<>();
+		HashMap<Layout, Integer> layoutVisitedSet = new HashMap<>();
 		ArrayDeque<Layout> printList = new ArrayDeque<>();
 		Layout layout = new Layout(0);
 		layout.insertNode(new Node(Shape.square, 1, 0), 0);
@@ -28,13 +28,16 @@ public class Solution {
 		layout.toMask();
 		layout.calHeuristicScore();
 		layoutQueue.add(layout);
-		layoutVisitedSet.add(layout);
+		layoutVisitedSet.put(layout, layout.step);
 		Layout curLayout = null;
 		
 		int count = 0;
 		
 		while (!layoutQueue.isEmpty()) {
 			count++;
+			if(count % 10000 == 0){
+				System.out.println(count);
+			}
 			curLayout = layoutQueue.poll();
 			if (curLayout.isSolved()) {
 				System.out.println("found solution with " + curLayout.step  +" steps");
@@ -43,14 +46,14 @@ public class Solution {
 			curLayout.move(layoutQueue, layoutVisitedSet);
 		}
 		
-//		while(curLayout.getBeforeLayout() != null){
-//			printList.addFirst(curLayout);
-//			curLayout = curLayout.getBeforeLayout();
-//		}
-//		
-//		for(Layout printLayout : printList){
-//			printLayout.printMask();
-//		}
+		while(curLayout.getBeforeLayout() != null){
+			printList.addFirst(curLayout);
+			curLayout = curLayout.getBeforeLayout();
+		}
+		
+		for(Layout printLayout : printList){
+			printLayout.printMask();
+		}
 		
 		
 		long end =System.currentTimeMillis();

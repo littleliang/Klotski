@@ -8,7 +8,7 @@ import java.io.ObjectOutputStream;
 import java.io.OptionalDataException;
 import java.io.Serializable;
 import java.util.Arrays;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.PriorityQueue;
 
 import klotski.util.ConstValue;
@@ -34,18 +34,18 @@ public class Layout implements Serializable, Comparable<Layout>{
 		this.step = step;
 	}
 	
-	public void move(PriorityQueue<Layout> layoutQueue, HashSet<Layout> layoutVisitedSet) throws OptionalDataException, ClassNotFoundException, IOException{
+	public void move(PriorityQueue<Layout> layoutQueue, HashMap<Layout, Integer> layoutVisitedSet) throws OptionalDataException, ClassNotFoundException, IOException{
 		for(int i = 0; i < nodes.length; i++){
 			if(nodes[i].getTop() > 0 && mask[nodes[i].getTop() - 1][nodes[i].getLeft()] == 0
 					&& mask[nodes[i].getTop() - 1][nodes[i].getRight()] == 0){
 				Layout next = this.deepClone();
 				next.setBeforeLayout(this);
+				next.step++;
 				next.nodes[i].moveUp();
 				next.toMask();
 				next.calHeuristicScore();
-				if(!layoutVisitedSet.contains(next)){
-					next.step++;
-					layoutVisitedSet.add(next);
+				if(!layoutVisitedSet.containsKey(next)){
+					layoutVisitedSet.put(next, next.step);
 					layoutQueue.add(next);
 				}
 			}
@@ -54,12 +54,12 @@ public class Layout implements Serializable, Comparable<Layout>{
 					&& mask[nodes[i].getBottom() + 1][nodes[i].getRight()] == 0){
 				Layout next = this.deepClone();
 				next.setBeforeLayout(this);
+				next.step++;
 				next.nodes[i].moveDown();
 				next.toMask();
 				next.calHeuristicScore();
-				if(!layoutVisitedSet.contains(next)){
-					next.step++;
-					layoutVisitedSet.add(next);
+				if(!layoutVisitedSet.containsKey(next)){
+					layoutVisitedSet.put(next, next.step);
 					layoutQueue.add(next);
 				}
 			}
@@ -68,12 +68,12 @@ public class Layout implements Serializable, Comparable<Layout>{
 					&& mask[nodes[i].getBottom()][nodes[i].getLeft() - 1] == 0){
 				Layout next = this.deepClone();
 				next.setBeforeLayout(this);
+				next.step++;
 				next.nodes[i].moveLeft();
 				next.toMask();
 				next.calHeuristicScore();
-				if(!layoutVisitedSet.contains(next)){
-					next.step++;
-					layoutVisitedSet.add(next);
+				if(!layoutVisitedSet.containsKey(next)){
+					layoutVisitedSet.put(next, next.step);
 					layoutQueue.add(next);
 				}
 			}
@@ -82,12 +82,12 @@ public class Layout implements Serializable, Comparable<Layout>{
 					&& mask[nodes[i].getBottom()][nodes[i].getRight() + 1] == 0){
 				Layout next = this.deepClone();
 				next.setBeforeLayout(this);
+				next.step++;
 				next.nodes[i].moveRight();
 				next.toMask();
 				next.calHeuristicScore();
-				if(!layoutVisitedSet.contains(next)){
-					next.step++;
-					layoutVisitedSet.add(next);
+				if(!layoutVisitedSet.containsKey(next)){
+					layoutVisitedSet.put(next, next.step);
 					layoutQueue.add(next);
 				}
 			}
